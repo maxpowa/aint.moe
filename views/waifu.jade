@@ -1,0 +1,9 @@
+extends layout
+
+block content
+  .wrap
+    h1.not-moe #{subject} ain't moe
+    em.never-moe and never will be.
+  .background-art
+    each preview in previews
+      img(src="http://danbooru.donmai.us" + preview, rel="noreferrer")

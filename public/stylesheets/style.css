@@ -37,6 +37,23 @@ a {
   margin-bottom: 0.2em;
 }
 
+input[type=text] {
+  text-align: center;
+  max-width: 5em;
+  font-family: "Lucida Grande", Helvetica, Arial, sans-serif;
+  font-weight: bold;
+  border: 0px solid #e4e4e4;
+  border-bottom-width: 0.05em;
+  background-color: transparent;
+  color: #fff;
+  outline: none;
+  font-size: 1em;
+}
+input[type=text]:focus {
+  border: 0px solid #fff;
+  border-bottom-width: 0.05em;
+}
+
 .never-moe {
   font-size: 1em;
   color: #fff;

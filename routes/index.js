@@ -47,7 +47,7 @@ let handle_request = (req, res, next) => {
     })
     shuffle(previews)
 
-    res.render('index', { subject: subject, previews: previews})
+    res.render('waifu', { subject: subject, previews: previews})
   })
 }
 
