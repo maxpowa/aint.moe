@@ -51,6 +51,7 @@ logger.format('dev', function developmentFormatLine (tokens, req, res) {
 logger.token('hostname', function getUrlToken (req) {
   return req.hostname
 })
+app.set('trust proxy', 'loopback');
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
