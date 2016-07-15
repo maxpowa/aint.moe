@@ -48,6 +48,11 @@ input[type=text] {
   color: #fff;
   outline: none;
   font-size: 1em;
+  text-shadow:
+  -1px -1px 0 #000,
+  1px -1px 0 #000,
+  -1px 1px 0 #000,
+  1px 1px 0 #000;
 }
 input[type=text]:focus {
   border: 0px solid #fff;

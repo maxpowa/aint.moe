@@ -1,8 +1,11 @@
 extends layout
 
 block content
-  .wrap
+  form.wrap(onsubmit="window.location.href = (location.protocol + '//' + document.getElementById('subject').value.replace(' ', '.') + '.' + window.location.host);return false;")
     h1.not-moe
-      input(type="text")
+      input#subject(type="text")
       |  ain't moe
     em.never-moe and never will be.
+  .background-art
+    each preview in previews
+      img(src="http://danbooru.donmai.us" + preview, rel="noreferrer")

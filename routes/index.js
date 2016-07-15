@@ -32,6 +32,8 @@ let handle_request = (req, res, next) => {
     var error = new Error('Too many tags specified')
     error.status = 403
     return next(error)
+  } else if (tags.length == 1) {
+    tags.push("rating:safe")
   }
 
   danbooru.search(tags.join(" "), {limit: 50}, (err, pageData) => {
@@ -54,8 +56,22 @@ let handle_request = (req, res, next) => {
 router.get('/', apicache.middleware('1 hour'), (req, res, next) => {
   // Handle requests directly to the root
   if (req.subdomains.length === 0) {
-    res.render('index', { title: 'Express' })
-    return next();
+    danbooru.search("rating:safe", {limit: 50}, (err, pageData) => {
+      if (err) throw err;
+      if (pageData.length === 0) {
+        var error = new Error('Not found')
+        error.status = 404
+        return next(error)
+      }
+
+      let previews = pageData.map((val) => {
+        return val.preview_file_url
+      })
+      shuffle(previews)
+
+      res.render('index', { previews: previews})
+    })
+    return
   }
 
   handle_request(req, res, next)
