@@ -3,6 +3,7 @@
 let express = require('express')
 let router = express.Router()
 let danbooru = require('danbooru')
+let apicache = require('apicache')
 
 let shuffle = (array) => {
   let i = 0, j = 0, temp = null
@@ -23,11 +24,15 @@ let handle_request = (req, res, next) => {
   subject = subject.replace(/(^|\s)[a-z]/g, (f) => f.toUpperCase() )
 
   let tags = req.path.replace(/^\//, '')
-
-  tags = req.path.split('/')
+  tags = tags.split('/')
   // Add * to subject for wildcard danbooru search (misaka will find misaka_mikoto etc)
   tags.push(subject.replace(" ", "_") + "*")
 
+  if (tags.length > 2) {
+    var error = new Error('Too many tags specified')
+    error.status = 403
+    return next(error)
+  }
 
   danbooru.search(tags.join(" "), {limit: 50}, (err, pageData) => {
     if (err) throw err;
@@ -46,7 +51,7 @@ let handle_request = (req, res, next) => {
   })
 }
 
-router.get('/', (req, res, next) => {
+router.get('/', apicache.middleware('1 hour'), (req, res, next) => {
   // Handle requests directly to the root
   if (req.subdomains.length === 0) {
     res.render('index', { title: 'Express' })
@@ -56,6 +61,6 @@ router.get('/', (req, res, next) => {
   handle_request(req, res, next)
 });
 
-router.get('/*', handle_request)
+router.get('/*', apicache.middleware('1 hour'), handle_request)
 
 module.exports = router

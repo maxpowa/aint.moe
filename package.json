@@ -6,6 +6,7 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
+    "apicache": "git+https://github.com/maxpowa/apicache.git",
     "body-parser": "~1.15.1",
     "cookie-parser": "~1.4.3",
     "danbooru": "^1.4.8",
