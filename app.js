@@ -4,8 +4,11 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var minify = require('express-minify');
+var compression = require('compression');
 
 var routes = require('./routes/index');
+var cache = require('./routes/cache');
 
 /**
  * Die when docker asks us to
@@ -59,8 +62,12 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(compression());
+app.use(minify());
+app.use('/static', express.static(path.join(__dirname, 'public')));
+app.use('/cache', express.static(path.join(__dirname, 'cache')));
 
+app.use('/cache', cache);
 app.use('/', routes);
 
 // catch 404 and forward to error handler

@@ -2,8 +2,9 @@
 
 let express = require('express')
 let router = express.Router()
-let safebooru = require('../lib/safebooru.js')
+let safebooru = require('../lib/safebooru')
 let apicache = require('apicache')
+let cache = require('../lib/cache').to_cache
 
 let replaceAll = (str, find, replace) => {
   return str.replace(new RegExp(find, 'g'), replace);
@@ -21,6 +22,8 @@ let shuffle = (array) => {
 }
 
 let handle_request = (req, res, next) => {
+  // Skip this request if it starts with some blacklisted things
+  if (req.path.match(/^\/(favicon|static|cache)/)) return next()
   // Skip this request as it's a subpath on the root
   if (req.subdomains.length === 0) return next()
 
@@ -50,7 +53,7 @@ let handle_request = (req, res, next) => {
     }
 
     let previews = pageData.map((val) => {
-      return val.sample_url
+      return cache(val.sample_url)
     })
     shuffle(previews)
 
@@ -70,7 +73,7 @@ router.get('/', apicache.middleware('1 hour'), (req, res, next) => {
       }
 
       let previews = pageData.map((val) => {
-        return val.sample_url
+        return cache(val.sample_url)
       })
       shuffle(previews)
 
