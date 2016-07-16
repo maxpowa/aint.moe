@@ -1,5 +1,5 @@
 var express = require('express');
-var path = require('path');
+var path = require('path')
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
@@ -48,9 +48,12 @@ logger.format('dev', function developmentFormatLine (tokens, req, res) {
 
   return fn(tokens, req, res)
 })
+
 logger.token('hostname', function getUrlToken (req) {
   return req.hostname
 })
+
+
 app.set('trust proxy', 'loopback');
 app.use(logger('dev'));
 app.use(bodyParser.json());

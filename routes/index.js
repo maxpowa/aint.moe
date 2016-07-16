@@ -2,8 +2,12 @@
 
 let express = require('express')
 let router = express.Router()
-let danbooru = require('danbooru')
+let safebooru = require('../lib/safebooru.js')
 let apicache = require('apicache')
+
+let replaceAll = (str, find, replace) => {
+  return str.replace(new RegExp(find, 'g'), replace);
+}
 
 let shuffle = (array) => {
   let i = 0, j = 0, temp = null
@@ -26,18 +30,19 @@ let handle_request = (req, res, next) => {
   let tags = req.path.replace(/^\//, '')
   tags = tags.split('/')
   // Add * to subject for wildcard danbooru search (misaka will find misaka_mikoto etc)
-  tags.push(subject.replace(" ", "_") + "*")
+  tags.push(replaceAll(subject, " ", "_") + "*")
 
-  if (tags.length > 2) {
-    var error = new Error('Too many tags specified')
-    error.status = 403
-    return next(error)
-  } else if (tags.length == 1) {
-    tags.push("rating:safe")
-  }
+  // if (tags.length == 1) {
+  //   tags.push("rating:safe")
+  // }
+  // } else if (tags.length > 2) {
+  //   var error = new Error('Too many tags specified')
+  //   error.status = 403
+  //   return next(error)
+  // }
 
-  danbooru.search(tags.join(" "), {limit: 50}, (err, pageData) => {
-    if (err) throw err;
+  safebooru.search(tags.join(" "), {limit: 45}, (err, pageData) => {
+    if (err) return next(err);
     if (pageData.length === 0) {
       var error = new Error('Not found')
       error.status = 404
@@ -45,7 +50,7 @@ let handle_request = (req, res, next) => {
     }
 
     let previews = pageData.map((val) => {
-      return val.preview_file_url
+      return val.sample_url
     })
     shuffle(previews)
 
@@ -56,8 +61,8 @@ let handle_request = (req, res, next) => {
 router.get('/', apicache.middleware('1 hour'), (req, res, next) => {
   // Handle requests directly to the root
   if (req.subdomains.length === 0) {
-    danbooru.search("rating:safe", {limit: 50}, (err, pageData) => {
-      if (err) throw err;
+    safebooru.search("*", {limit: 45}, (err, pageData) => {
+      if (err) return next(err);
       if (pageData.length === 0) {
         var error = new Error('Not found')
         error.status = 404
@@ -65,7 +70,7 @@ router.get('/', apicache.middleware('1 hour'), (req, res, next) => {
       }
 
       let previews = pageData.map((val) => {
-        return val.preview_file_url
+        return val.sample_url
       })
       shuffle(previews)
 

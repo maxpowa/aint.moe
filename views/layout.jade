@@ -1,8 +1,15 @@
 doctype html
 html
   head
-    title= title || "Your waifu ain't moe."
+    title= (subject || "Your waifu") + " ain't moe."
     link(rel='stylesheet', href='/stylesheets/style.css')
     meta(name="viewport", content="initial-scale=1.0, minimum-scale=1.0, maximum-scale = 1.0, user-scalable=no, width=device-width, height=device-height")
   body
     block content
+    .footer
+      | Images pulled from 
+      a(href="http://safebooru.org/" target="_blank") Safebooru
+      |  · Inspired by 
+      a(href="http://isnt.moe" target="_blank") isnt.moe
+      |  · 
+      a(href="https://github.com/maxpowa/aint.moe" target="_blank") Source

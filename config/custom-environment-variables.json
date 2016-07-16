@@ -1,0 +1,13 @@
+{
+  "host": "HOST",
+  "port": "PORT",
+  "ssl port": "SSL_PORT",
+  "letsencrypt": {
+    "directory": "LETSENCRYPT_DIR",
+    "email": "LETSENCRYPT_EMAIL",
+    "agreetos": {
+      "__name": "LETSENCRYPT_TOS",
+      "__format": "json"
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "host": "aint.moe",
+  "port": 8080,
+  "ssl port": 8443,
+  "letsencrypt": {
+    "directory": "/etc/letsencrypt",
+    "email": "your@email.here",
+    "agreetos": true
+  }
+}
