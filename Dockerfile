@@ -1,4 +1,4 @@
-FROM node:6.2.2-onbuild
+FROM node:4-onbuild
 
 ENV NODE_ENV production
 ENV PORT 80
